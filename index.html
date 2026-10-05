@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Magical Pet Sanctuary</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #3b2a5a;
+      --muted: #6f6490;
+      --bg: #fbf7ff;
+      --paper: #ffffff;
+      --lavender: #e6dcff;
+      --mint: #d3f5e5;
+      --peach: #ffdfd0;
+      --butter: #fff2bf;
+      --sky: #d5ebff;
+      --rose: #ffd8ec;
+      --accent: #8a63e8;
+      --accent-dark: #6d47cc;
+      --danger: #d6456b;
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { -webkit-text-size-adjust: 100%; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Nunito", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 8%, var(--rose) 0, transparent 38%),
+        radial-gradient(circle at 88% 14%, var(--sky) 0, transparent 34%),
+        radial-gradient(circle at 70% 92%, var(--mint) 0, transparent 36%),
+        var(--bg);
+      background-attachment: fixed;
+    }
+
+    h1, h2, h3 { font-family: "Fredoka", "Nunito", sans-serif; font-weight: 600; margin: 0; }
+
+    /* ---------- header ---------- */
+    .hero {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 20px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: 1.05;
+    }
+
+    .hero p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 38ch;
+    }
+
+    .btn {
+      font: inherit;
+      font-weight: 700;
+      border: none;
+      border-radius: 999px;
+      padding: 13px 24px;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease;
+    }
+    .btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+    .btn:disabled { opacity: .6; cursor: wait; }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      box-shadow: 0 6px 0 var(--accent-dark);
+    }
+    .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 0 var(--accent-dark); }
+    .btn-primary:active:not(:disabled) { transform: translateY(4px); box-shadow: 0 2px 0 var(--accent-dark); }
+
+    .btn-ghost { background: transparent; color: var(--muted); }
+    .btn-ghost:hover { background: var(--lavender); color: var(--ink); }
+
+    /* ---------- status line ---------- */
+    .status {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+      min-height: 28px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+    .status.error { color: var(--danger); }
+
+    /* ---------- grid ---------- */
+    .grid {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 12px 20px 64px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 22px;
+    }
+
+    .card {
+      --tint: var(--lavender);
+      position: relative;
+      background: var(--paper);
+      border-radius: var(--radius);
+      padding: 0 20px 20px;
+      box-shadow: 0 10px 30px rgba(80, 50, 140, .10);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .card:hover {
+      transform: translateY(-6px) rotate(-.6deg);
+      box-shadow: 0 18px 40px rgba(80, 50, 140, .18);
+    }
+    .card[data-type="Dragon"]  { --tint: var(--peach); }
+    .card[data-type="Unicorn"] { --tint: var(--rose); }
+    .card[data-type="Phoenix"] { --tint: var(--butter); }
+    .card[data-type="Fairy"]   { --tint: var(--mint); }
+    .card[data-type="Griffin"] { --tint: var(--sky); }
+
+    .card-top {
+      margin: 0 -20px 14px;
+      height: 120px;
+      background: var(--tint);
+      display: grid;
+      place-items: center;
+      border-radius: 0 0 50% 50% / 0 0 36px 36px;
+    }
+    .emoji {
+      font-size: 3.6rem;
+      line-height: 1;
+      transition: transform .3s ease;
+    }
+    .card:hover .emoji { transform: scale(1.15) translateY(-4px); }
+
+    .card h3 { font-size: 1.4rem; }
+    .pet-type { margin: 2px 0 10px; font-weight: 700; color: var(--accent-dark); }
+    .pet-desc { margin: 0 0 14px; color: var(--muted); line-height: 1.5; flex: 1; }
+
+    .pet-color {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .swatch {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 1px rgba(59, 42, 90, .25);
+      background: var(--lavender);
+    }
+    .swatch.rainbow {
+      background: conic-gradient(#ff6b6b, #ffd93d, #6bcb77, #4d96ff, #b36bff, #ff6b6b);
+    }
+
+    .release {
+      font: inherit;
+      font-weight: 700;
+      border: 2px solid var(--tint);
+      background: #fff;
+      color: var(--danger);
+      border-radius: 999px;
+      padding: 9px 16px;
+      cursor: pointer;
+      transition: background-color .15s ease, border-color .15s ease;
+    }
+    .release:hover:not(:disabled) { background: var(--rose); border-color: var(--rose); }
+    .release:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+    .release:disabled { opacity: .6; cursor: wait; }
+
+    .card.leaving {
+      transform: scale(.85);
+      opacity: 0;
+      transition: transform .2s ease, opacity .2s ease;
+    }
+
+    .empty {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 48px 16px;
+      color: var(--muted);
+      font-size: 1.1rem;
+    }
+
+    /* ---------- modal ---------- */
+    dialog {
+      border: none;
+      border-radius: 26px;
+      padding: 0;
+      width: min(460px, calc(100vw - 32px));
+      color: var(--ink);
+      box-shadow: 0 30px 80px rgba(60, 30, 120, .35);
+    }
+    dialog::backdrop { background: rgba(59, 42, 90, .45); backdrop-filter: blur(3px); }
+    dialog[open] { animation: pop .22s ease; }
+    @keyframes pop { from { transform: scale(.94); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+    .modal-head {
+      background: var(--lavender);
+      padding: 22px 26px 18px;
+    }
+    .modal-head h2 { font-size: 1.6rem; }
+    .modal-head p { margin: 4px 0 0; color: var(--muted); }
+
+    form { padding: 22px 26px 26px; display: grid; gap: 16px; }
+    label { display: grid; gap: 6px; font-weight: 700; }
+    input, select, textarea {
+      font: inherit;
+      font-weight: 400;
+      color: var(--ink);
+      padding: 11px 14px;
+      border: 2px solid var(--lavender);
+      border-radius: 14px;
+      background: #fff;
+    }
+    input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(138, 99, 232, .2);
+    }
+    textarea { resize: vertical; min-height: 84px; }
+    .form-error { color: var(--danger); font-weight: 600; min-height: 1.2em; margin: 0; }
+    .actions { display: flex; justify-content: flex-end; gap: 10px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="hero">
+    <div>
+      <h1>Magical Pet Sanctuary 🐾</h1>
+      <p>Every creature here is looking for a caretaker. Adopt a new friend or set one free.</p>
+    </div>
+    <button class="btn btn-primary" id="openFormBtn" type="button">Adopt New Pet ✨</button>
+  </header>
+
+  <p class="status" id="status" role="status" aria-live="polite"></p>
+
+  <main class="grid" id="petGrid" aria-label="Magical pets"></main>
+
+  <dialog id="adoptDialog" aria-labelledby="dialogTitle">
+    <div class="modal-head">
+      <h2 id="dialogTitle">Adopt a new pet</h2>
+      <p>Tell us who is joining the sanctuary.</p>
+    </div>
+
+    <form id="adoptForm">
+      <label>
+        Pet name
+        <input type="text" id="petName" name="name" maxlength="40" placeholder="Sparkle" required>
+      </label>
+
+      <label>
+        Pet type
+        <select id="petType" name="type" required>
+          <option value="Dragon">Dragon 🐉</option>
+          <option value="Unicorn">Unicorn 🦄</option>
+          <option value="Phoenix">Phoenix 🔥</option>
+          <option value="Fairy">Fairy 🧚</option>
+          <option value="Griffin">Griffin 🦅</option>
+        </select>
+      </label>
+
+      <label>
+        Color
+        <input type="text" id="petColor" name="color" maxlength="30" placeholder="Pink, Golden, Rainbow..." required>
+      </label>
+
+      <label>
+        Description
+        <textarea id="petDesc" name="description" maxlength="140" placeholder="Loves marshmallows and thunderstorms." required></textarea>
+      </label>
+
+      <p class="form-error" id="formError" aria-live="polite"></p>
+
+      <div class="actions">
+        <button type="button" class="btn btn-ghost" id="cancelBtn">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="submitBtn">Adopt pet</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script>
+    // ============================================================
+    // 1. PASTE YOUR MOCKAPI.IO ENDPOINT HERE
+    //    Example: https://66abc123.mockapi.io/api/v1/pets
+    //    The resource must be called "pets" and have these fields:
+    //    name, type, color, description (all String)
+    // ============================================================
+    const API_URL = "https://6ac3bc1bae53bf25b80eee1f.mockapi.io/api/v1/pets";
+
+    const TYPE_EMOJI = {
+      Dragon: "🐉",
+      Unicorn: "🦄",
+      Phoenix: "🔥",
+      Fairy: "🧚",
+      Griffin: "🦅"
+    };
+
+    // Words people use as colors that are not valid CSS colors
+    const COLOR_ALIASES = { golden: "gold", silver: "silver", pink: "hotpink" };
+
+    const petGrid = document.getElementById("petGrid");
+    const statusEl = document.getElementById("status");
+    const dialog = document.getElementById("adoptDialog");
+    const form = document.getElementById("adoptForm");
+    const formError = document.getElementById("formError");
+    const submitBtn = document.getElementById("submitBtn");
+
+    // ---------- small UI helpers ----------
+    function setStatus(message, isError = false) {
+      statusEl.textContent = message;
+      statusEl.classList.toggle("error", isError);
+    }
+
+    function showEmptyMessage() {
+      if (petGrid.querySelector(".card")) return;
+      const p = document.createElement("p");
+      p.className = "empty";
+      p.textContent = "The sanctuary is quiet. Adopt your first magical pet! ✨";
+      petGrid.appendChild(p);
+    }
+
+    function clearEmptyMessage() {
+      const empty = petGrid.querySelector(".empty");
+      if (empty) empty.remove();
+    }
+
+    // ---------- API calls (all use fetch + async/await) ----------
+
+    // GET: load all pets
+    async function getPets() {
+      const response = await fetch(API_URL);
+      if (!response.ok) throw new Error("GET failed: " + response.status);
+      return response.json();
+    }
+
+    // POST: create a pet, the API returns it with its new id
+    async function createPet(pet) {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(pet)
+      });
+      if (!response.ok) throw new Error("POST failed: " + response.status);
+      return response.json();
+    }
+
+    // DELETE: remove a pet by id
+    async function deletePet(id) {
+      const response = await fetch(API_URL + "/" + id, { method: "DELETE" });
+      if (!response.ok) throw new Error("DELETE failed: " + response.status);
+    }
+
+    // ---------- rendering ----------
+    function createCard(pet) {
+      const card = document.createElement("article");
+      card.className = "card";
+      card.dataset.type = pet.type;
+      card.dataset.id = pet.id;
+
+      const top = document.createElement("div");
+      top.className = "card-top";
+      const emoji = document.createElement("span");
+      emoji.className = "emoji";
+      emoji.textContent = TYPE_EMOJI[pet.type] || "🐾";
+      emoji.setAttribute("aria-hidden", "true");
+      top.appendChild(emoji);
+
+      const name = document.createElement("h3");
+      name.textContent = pet.name;
+
+      const type = document.createElement("p");
+      type.className = "pet-type";
+      type.textContent = pet.type;
+
+      const desc = document.createElement("p");
+      desc.className = "pet-desc";
+      desc.textContent = pet.description;
+
+      const colorRow = document.createElement("div");
+      colorRow.className = "pet-color";
+      const swatch = document.createElement("span");
+      swatch.className = "swatch";
+      const colorValue = String(pet.color || "").trim().toLowerCase();
+      if (colorValue === "rainbow") {
+        swatch.classList.add("rainbow");
+      } else {
+        const cssColor = COLOR_ALIASES[colorValue] || colorValue;
+        if (cssColor && CSS.supports("color", cssColor)) swatch.style.background = cssColor;
+      }
+      const colorText = document.createElement("span");
+      colorText.textContent = pet.color;
+      colorRow.append(swatch, colorText);
+
+      const releaseBtn = document.createElement("button");
+      releaseBtn.className = "release";
+      releaseBtn.type = "button";
+      releaseBtn.textContent = "Release";
+      releaseBtn.addEventListener("click", () => releasePet(pet, card, releaseBtn));
+
+      card.append(top, name, type, desc, colorRow, releaseBtn);
+      return card;
+    }
+
+    function renderPets(pets) {
+      petGrid.innerHTML = "";
+      if (pets.length === 0) {
+        showEmptyMessage();
+        return;
+      }
+      pets.forEach(pet => petGrid.appendChild(createCard(pet)));
+    }
+
+    // ---------- actions ----------
+    async function loadPets() {
+      if (API_URL.includes("YOUR_PROJECT_ID")) {
+        setStatus("Paste your mockapi.io endpoint into API_URL in the script first.", true);
+        return;
+      }
+      setStatus("Calling the pets... 🪄");
+      try {
+        const pets = await getPets();
+        renderPets(pets);
+        setStatus("");
+      } catch (error) {
+        console.log("Could not load pets:", error);
+        setStatus("Could not load the pets. Check your API_URL and try again.", true);
+      }
+    }
+
+    async function releasePet(pet, card, button) {
+      const confirmed = confirm("Release " + pet.name + " back into the wild?");
+      if (!confirmed) return;
+
+      button.disabled = true;
+      try {
+        await deletePet(pet.id);
+        card.classList.add("leaving");
+        card.addEventListener("transitionend", () => {
+          card.remove();
+          showEmptyMessage();
+        }, { once: true });
+        setStatus(pet.name + " was released. Fly free! 🕊️");
+      } catch (error) {
+        console.log("Could not release pet:", error);
+        button.disabled = false;
+        setStatus("Could not release " + pet.name + ". Try again.", true);
+      }
+    }
+
+    async function handleAdopt(event) {
+      event.preventDefault();
+      formError.textContent = "";
+
+      const pet = {
+        name: form.name.value.trim(),
+        type: form.type.value,
+        color: form.color.value.trim(),
+        description: form.description.value.trim()
+      };
+
+      if (!pet.name || !pet.color || !pet.description) {
+        formError.textContent = "Please fill in every field.";
+        return;
+      }
+      if (API_URL.includes("YOUR_PROJECT_ID")) {
+        formError.textContent = "Add your mockapi.io endpoint to API_URL first.";
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Adopting...";
+      try {
+        const created = await createPet(pet);
+        clearEmptyMessage();
+        petGrid.prepend(createCard(created));   // show it immediately, no reload
+        form.reset();
+        dialog.close();
+        setStatus(created.name + " joined the sanctuary! 🎉");
+      } catch (error) {
+        console.log("Could not adopt pet:", error);
+        formError.textContent = "Could not adopt the pet. Please try again.";
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Adopt pet";
+      }
+    }
+
+    // ---------- events ----------
+    document.getElementById("openFormBtn").addEventListener("click", () => {
+      formError.textContent = "";
+      dialog.showModal();
+      document.getElementById("petName").focus();
+    });
+    document.getElementById("cancelBtn").addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) dialog.close();   // click on the backdrop
+    });
+    form.addEventListener("submit", handleAdopt);
+
+    loadPets();
+  </script>
+</body>
+</html>
