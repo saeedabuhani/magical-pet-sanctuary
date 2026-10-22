@@ -6,8 +6,6 @@ A playful single-page app to adopt magical pets and set them free again. Plain H
 ![CSS](https://img.shields.io/badge/CSS3-1572b6)
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES2020-f7df1e)
 
-### [▶ Live Demo](https://magical-pet-sanctuary-647.netlify.app)
-
 | | |
 |---|---|
 | ![Home](docs/screenshots/01-home.png) | ![An adopted pet](docs/screenshots/02-adopted-pet.png) |
@@ -44,7 +42,7 @@ npx serve .
 
 ## Tests
 
-No automated tests. Checked with Playwright on the live site: the page loads with no console errors at 1440 px and 375 px, and adopting then releasing a pet works.
+No automated tests. Checked with Playwright against the deployed page (since taken down): the page loads with no console errors at 1440 px and 375 px, and adopting then releasing a pet works.
 
 ## Security notes
 
